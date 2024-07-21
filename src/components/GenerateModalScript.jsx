@@ -6,7 +6,7 @@ const GenerateModalScript = ({ modalId }) => {
     (function() {
       const modalId = '${modalId}';
       const script = document.createElement('script');
-      script.src = 'https://path-to-your-app/modal.js';
+      script.src = 'https://your-public-url/modal.js';
       script.onload = function() {
         window.initializeModal(modalId);
       };
