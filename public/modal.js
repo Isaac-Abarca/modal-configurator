@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // public/modal.js
 (function() {
   function loadFirebaseScripts(callback) {
@@ -6,12 +7,7 @@
     appScript.onload = function() {
       const firestoreScript = document.createElement('script');
       firestoreScript.src = "https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js";
-      firestoreScript.onload = function() {
-        const authScript = document.createElement('script');
-        authScript.src = "https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js";
-        authScript.onload = callback;
-        document.head.appendChild(authScript);
-      };
+      firestoreScript.onload = callback;
       document.head.appendChild(firestoreScript);
     };
     document.head.appendChild(appScript);
@@ -38,7 +34,7 @@
       if (doc.exists) {
         const modalData = doc.data();
         const modalStyles = modalData.styles ? JSON.parse(modalData.styles) : {};
-        renderModal(modalData, modalStyles);
+        renderChatbot(modalData, modalStyles);
       } else {
         console.error('No such document!');
       }
@@ -47,43 +43,48 @@
     });
   }
 
-  function renderModal(modalData, modalStyles) {
+  function renderChatbot(modalData) {
+    const chatbotButton = document.createElement('div');
+    chatbotButton.innerHTML = '<img src="https://via.placeholder.com/50" alt="Chatbot" style="border-radius: 50%;"/>';
+    chatbotButton.style = "position: fixed; bottom: 20px; right: 20px; cursor: pointer;";
+    chatbotButton.addEventListener('click', openModal);
+
     const modalOverlay = document.createElement('div');
-    Object.assign(modalOverlay.style, modalStyles.modalOverlay);
+    modalOverlay.style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: none;";
     modalOverlay.addEventListener('click', closeModal);
 
     const modal = document.createElement('div');
-    Object.assign(modal.style, modalStyles.modal);
+    modal.style = "position: fixed; bottom: 80px; right: 20px; width: 300px; height: 400px; background: white; border-radius: 8px; display: none; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);";
 
     const modalHeader = document.createElement('div');
-    Object.assign(modalHeader.style, modalStyles.modalHeader);
-    const modalTitle = document.createElement('h2');
-    Object.assign(modalTitle.style, modalStyles["modalHeader h2"]);
-    modalTitle.innerText = modalData.title;
-    modalHeader.appendChild(modalTitle);
+    modalHeader.style = "padding: 10px; background: #f5f5f5; border-bottom: 1px solid #ddd; border-top-left-radius: 8px; border-top-right-radius: 8px;";
+    modalHeader.innerHTML = `<h2 style="margin: 0;">${modalData.title}</h2>`;
 
     const modalBody = document.createElement('div');
-    Object.assign(modalBody.style, modalStyles.modalBody);
+    modalBody.style = "padding: 10px;";
     modalBody.innerText = modalData.description;
 
-    const modalFooter = document.createElement('div');
-    Object.assign(modalFooter.style, modalStyles.modalFooter);
     const closeButton = document.createElement('button');
-    Object.assign(closeButton.style, modalStyles["modalFooter button secondary"]);
-    closeButton.innerText = 'Close';
+    closeButton.style = "position: absolute; top: 10px; right: 10px; cursor: pointer;";
+    closeButton.innerText = '✖';
     closeButton.addEventListener('click', closeModal);
-    modalFooter.appendChild(closeButton);
 
     modal.appendChild(modalHeader);
     modal.appendChild(modalBody);
-    modal.appendChild(modalFooter);
+    modal.appendChild(closeButton);
 
+    document.body.appendChild(chatbotButton);
     document.body.appendChild(modalOverlay);
     document.body.appendChild(modal);
 
+    function openModal() {
+      modalOverlay.style.display = 'block';
+      modal.style.display = 'block';
+    }
+
     function closeModal() {
-      document.body.removeChild(modal);
-      document.body.removeChild(modalOverlay);
+      modalOverlay.style.display = 'none';
+      modal.style.display = 'none';
     }
   }
 
