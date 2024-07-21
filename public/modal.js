@@ -2,13 +2,13 @@
 (function() {
   function loadFirebaseScripts(callback) {
     const appScript = document.createElement('script');
-    appScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    appScript.src = "https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js";
     appScript.onload = function() {
       const firestoreScript = document.createElement('script');
-      firestoreScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+      firestoreScript.src = "https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js";
       firestoreScript.onload = function() {
         const authScript = document.createElement('script');
-        authScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        authScript.src = "https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js";
         authScript.onload = callback;
         document.head.appendChild(authScript);
       };
