@@ -1,9 +1,9 @@
 // public/modal.js
 (function() {
   function loadFirebaseScripts(callback) {
-    const script = document.createElement('script');
-    script.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    script.onload = function() {
+    const appScript = document.createElement('script');
+    appScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    appScript.onload = function() {
       const firestoreScript = document.createElement('script');
       firestoreScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
       firestoreScript.onload = function() {
@@ -14,7 +14,7 @@
       };
       document.head.appendChild(firestoreScript);
     };
-    document.head.appendChild(script);
+    document.head.appendChild(appScript);
   }
 
   function initializeModal(modalId) {
@@ -93,5 +93,3 @@
     });
   };
 })();
-
-  
