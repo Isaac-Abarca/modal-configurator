@@ -1,6 +1,22 @@
-/* eslint-disable no-undef */
 // public/modal.js
 (function() {
+  function loadFirebaseScripts(callback) {
+    const script = document.createElement('script');
+    script.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    script.onload = function() {
+      const firestoreScript = document.createElement('script');
+      firestoreScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+      firestoreScript.onload = function() {
+        const authScript = document.createElement('script');
+        authScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        authScript.onload = callback;
+        document.head.appendChild(authScript);
+      };
+      document.head.appendChild(firestoreScript);
+    };
+    document.head.appendChild(script);
+  }
+
   function initializeModal(modalId) {
     const firebaseConfig = {
       apiKey: 'AIzaSyCiJVM0jxgYgpQ020z-8OT4tvA5qEJNP8M',
@@ -11,7 +27,7 @@
       appId: '1:946668471994:web:16bf767d273c92f97ee483',
       measurementId: 'G-5HX8WN2XDL'
     };
-    
+
     // Initialize Firebase
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
@@ -71,7 +87,11 @@
     }
   }
 
-  window.initializeModal = initializeModal;
+  window.initializeModal = function(modalId) {
+    loadFirebaseScripts(function() {
+      initializeModal(modalId);
+    });
+  };
 })();
 
   
